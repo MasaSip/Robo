@@ -36,21 +36,24 @@ public class Kartta {
 	}
 	
 	public static void main(String[] args) {
+		
 		Kartta k = new Kartta();
-		Solmu njee = new Solmu("jee");
-		Solmu nhii = new Solmu("hii");
-		k.lisaaSolmu(10, -10, njee);
-		k.lisaaSolmu(10, 5, nhii);
+		Solmu njee = new Solmu();
+		Solmu nhii = new Solmu();
+		k.lisaaSolmu(10, -10);
+		k.lisaaSolmu(10, 5);
 		
 		Solmu n1;
 		n1 = k.annaSolmu(10, -10);
-		System.out.println(n1.annaNimi());
+		System.out.println();
 		
 		n1 = k.annaSolmu(10, 5);
-		System.out.println(n1.annaNimi());
+		System.out.println();
 		n1 = k.annaSolmu(10, 6);
 		if (n1==null)
 			System.out.println("hulabaloo");
 
 	}
 }
+
+
