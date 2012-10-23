@@ -1,5 +1,10 @@
+import java.util.HashMap;
+
+
 public class Solmu {
-	
+
+	private HashMap <Ilmansuunta, Boolean> esteettomyysSuunnissa;
+	private Ruutu ruutu;
 	private String nimi; // mock
 	private int x, y;
 	private Kartta kartta;
@@ -23,4 +28,13 @@ public class Solmu {
 		return this.nimi;
 	}
 	*/
+	
+
+	
+	public Solmu(){
+		this.esteettomyysSuunnissa = new HashMap<Ilmansuunta, Boolean>();
+		this.esteettomyysSuunnissa.put(Ilmansuunta.POHJOINEN,
+				new Boolean (false) );
+		
+	}
 }
