@@ -30,15 +30,69 @@ public class Solmu {
 	} // end of CTOR
 	
 
-	public Este annaEsteet(Ilmansuunta i) {
+	/*
+	 * Anna Solmun Este-status pyydetylle Solmulle
+	 */
+	public Este annaEste(Ilmansuunta i) {
 		return this.esteetSuunnissa.get(i);
-	} // end of annaEsteettomyys
+	} // end of annaEsteet
 	
 
+	/*
+	 * Aseta Solmun pyydetylle suunnalle Este-status
+	 */
 	public void asetaEste(Ilmansuunta i, Este este) {
 		this.esteetSuunnissa.put(i, este);
-	} // end of asetaEsteettomyys
+	} // end of asetaEste
+	
+	
+	/*
+	 * Antaa naapurisolmun pyydetysta suunnasta, tama on null jos ei ole
+	 */
+	public Solmu annaNaapuriSolmu(Ilmansuunta suunta) {
+		
+		// onko maailmassa
+		if (kartta!=null) {
+		
+			// apukoordinaatit, rajoissa [-1,1]
+			
+			int x = 0;
+			int y = 0;
+			
+			// aseta apukoordinaatit osoittamaan naapuriruudun suuntaan
+			if (suunta!=null)
+				switch (suunta) {
+				case POHJOINEN:
+					y = 1;
+					break;
+				case LANSI:
+					x = -1;
+					break;
+				case ETELA:
+					y = -1;
+					break;
+				case ITA:
+					x = 1;
+					break;
+				default:
+					// ilmansuunta ei ole sopiva
+					return null;
+				} // end of switch
+			/*
+			 * Palauta Solmu halutusta kohdasta
+			 * joka on kohdassa {oma sijainti + apukoordinaatit} 
+			*/
+			return kartta.annaSolmu(this.y+y, this.x+x);
+			
+		} // kartta on olemassa
+		return null;
+	} // end of annaNaapuriSolmu
 
+	/*
+	 * TODO
+	 * 
+	 * annaNumero(), palauttaa numeron
+	 */
 
 
 }
