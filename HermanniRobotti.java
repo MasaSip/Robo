@@ -7,6 +7,7 @@ public class HermanniRobotti extends Robotti{
 	private Ilmansuunta suunta; //suunta johon hermanni katsoo
 	private int x;
 	private int y;
+	private int numero;
 	
 	
 	public HermanniRobotti(){
@@ -25,16 +26,27 @@ public class HermanniRobotti extends Robotti{
 		return this.y;
 	}
 	
+	public int annaAskelNumero(){
+		return this.numero;
+	}
+	
 	public void tarkistaYmparisto(){
 		
+		this.suunta = Ilmansuunta.POHJOINEN;
 		
-		kartta.lisaaSolmu(x,y, new Solmu()); // parametrit annettava
+		kartta.lisaaSolmu(x,y, new Solmu(x, y, kartta, numero)); // parametrit annettava TEHTY
 		suunta = suunta.numerostaSuunta(annaSuunta());
+		int montaVapaata = 0;
 	
 		Este e;
 		
 		// tarkista eteenpain
-		if (voiEdeta()) e = Este.VAPAA;
+		if (voiEdeta()){
+			e = Este.VAPAA;
+			if (!kartta.onSolmu(x, y + 1)){
+				montaVapaata++;
+			}
+		}
 		else e = Este.SEINA;
 		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), e);
 		kaannyVasemmalle();
@@ -42,19 +54,19 @@ public class HermanniRobotti extends Robotti{
 		// tarkista oikealle
 		if (voiEdeta()) e = Este.VAPAA;
 		else e = Este.SEINA;
-		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), ruutu.suunta.voiEdeta());	
+		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), e);	
 		kaannyVasemmalle();
 	
 		// tarkista taakse
 		if (voiEdeta()) e = Este.VAPAA;
 		else e = Este.SEINA;
-		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), ruutu.suunta.voiEdeta());	
+		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), e);	
 		kaannyVasemmalle();
 		
 		// tarkista vasemmalle
 		if (voiEdeta()) e = Este.VAPAA;
 		else e = Este.SEINA;
-		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), ruutu.suunta.voiEdeta());	
+		kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), e);	
 		kaannyVasemmalle();
 	
 	}
@@ -89,17 +101,18 @@ public class HermanniRobotti extends Robotti{
 		kaannyOikeaanSuuntaan();
 		etene();
 		asetaKoordinaatit();
+		numero++;
 		// ollaankoMaalissa();
 	}
 	
 	
 	/* TODO-lista:
 	 * 
-	 * int annaX(), palauttaa tamanhetkisen x-koordinaatin
-	 * int annaY(), palauttaa tamanhetkisen y-koordinaatin
+	 * int annaX(), palauttaa tamanhetkisen x-koordinaatin TEHTY
+	 * int annaY(), palauttaa tamanhetkisen y-koordinaatin TEHTY
 	 * 
 	 * 
-	 * -	Askeleiden numerolaskuria kasvatettava askeleen yhteydessa
+	 * -	Askeleiden numerolaskuria kasvatettava askeleen yhteydessa TEHTY
 	 *
 	 * tarkistaYmparisto(): Tulee lisata uusi Solmu vapaasuuntaisten solmujen
 	 * 		listalle, mikali tama sellainen on.
