@@ -32,6 +32,14 @@ public class Solmu {
 	/*
 	 * Anna Solmun Este-status pyydetylle Solmulle
 	 */
+	public int annaX(){
+		return x;
+	}
+	
+	public int annaY(){
+		return y;
+	}
+	
 	public Este annaEste(Ilmansuunta i) {
 		return this.esteetSuunnissa.get(i);
 	} // end of annaEsteet
@@ -87,11 +95,11 @@ public class Solmu {
 		return null;
 	} // end of annaNaapuriSolmu
 
-	public int annaNumero(){
+	public int annaAskelNumero(){
 		return this.numero;
 	}
 	
-	public void asetaNumero(int numero){
+	public void asetaAskelNumero(int numero){
 		this.numero = numero;
 	}
 }

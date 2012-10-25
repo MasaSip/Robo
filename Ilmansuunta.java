@@ -37,7 +37,7 @@ public enum Ilmansuunta {
 	/*
 	 * Palauttaa ilmansuuntaa vastaavan numeroarvon [0, 3]
 	 */
-	public int suunnastaNumero(Ilmansuunta suunta) {
+	public static int suunnastaNumero(Ilmansuunta suunta) {
 		switch (suunta) {
 		case POHJOINEN: return 0;
 		case ITA: return 1;
@@ -50,7 +50,7 @@ public enum Ilmansuunta {
 	/*
 	 * Palauttaa numeroa vastaavan ilmansuunan
 	 */
-	public Ilmansuunta numerostaSuunta(int nro ) {
+	public static Ilmansuunta numerostaSuunta(int nro ) {
 		switch (nro) {
 		case 0: return POHJOINEN;
 		case 1: return ITA;
