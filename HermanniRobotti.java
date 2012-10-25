@@ -33,21 +33,30 @@ public class HermanniRobotti extends Robotti{
 	
 	public void tarkistaYmparisto(){
 		
+		/* jottei rakas Hermanni loisi solmu jo olemassa olevan solmun päälle
+		 * eikä varsinkaan antaisi uutta askelnumeroa sijainnille jossa on jo
+		 * käyty. Testailin tätä  
+		 * 	-Masa
+		 */
+		if ( kartta.onSolmu(this.x, this.y) == false){ 
+			kartta.lisaaSolmu(x,y, new Solmu(x, y, kartta, numero)); // parametrit annettava TEHTY
 		
-		kartta.lisaaSolmu(x,y, new Solmu(x, y, kartta, numero)); // parametrit annettava TEHTY
-		suunta = suunta.numerostaSuunta(annaSuunta());
 		
+			suunta = suunta.numerostaSuunta(annaSuunta());
+			
+		
+			Este e;
+			
+			for ( int i = 0; i < 4; i++){
+				if (voiEdeta()) e = Este.VAPAA;
+				else e = Este.SEINA;
+				kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), e);
+				kaannyVasemmalle();
+			}
+		
+			if (kartta.onVapaa()) kartta.lisaaVapaa();	
 	
-		Este e;
-		
-		for ( int i = 0; i < 4; i++){
-			if (voiEdeta()) e = Este.VAPAA;
-			else e = Este.SEINA;
-			kartta.annaSolmu(x, y).asetaEste(suunta.numerostaSuunta(annaSuunta()), e);
-			kaannyVasemmalle();
 		}
-	
-		if (kartta.onVapaa()) kartta.lisaaVapaa();	
 	}
 	
 	
@@ -250,7 +259,7 @@ public class HermanniRobotti extends Robotti{
 		kaannyOikeaanSuuntaan();
 		etene();
 		asetaKoordinaatit();
-		numero++;
+		
 		// ollaankoMaalissa();
 	}
 	

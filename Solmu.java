@@ -14,12 +14,13 @@ public class Solmu {
 	} // asetaKartalle
 
 	// CTOR
-	public Solmu(int x, int y, Kartta kartta) {
+	public Solmu(int x, int y, Kartta kartta, int numero) {
 
 		this.x = x;
 		this.y = y;
 		this.kartta = kartta;
-
+		this.numero = numero;
+		
 		this.esteetSuunnissa = new HashMap<Ilmansuunta, Este>();
 
 		this.asetaEste(Ilmansuunta.POHJOINEN, Este.VAPAA);
