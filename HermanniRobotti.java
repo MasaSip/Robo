@@ -106,11 +106,16 @@ public class HermanniRobotti extends Robotti{
 	 * 
 	 * kaannyOikeaanSuuntaan():
 	 * 		1)	tarkista vapaiden suuntien maara
-	 * 			->	jos umpikujassa, suuntaa kohti lahinta vapaata eli
+	 * 			->	jos umpikujassa, eli jos ymparilla
+	 * 				vain ruutuja joissa kayty, tai seinia, 
+	 * 				suuntaa kohti lahinta vapaata eli
 	 * 				naapuria, jolla on pienin askelnumero
-	 * 				(HUOM onVapaa-metodi!, sitä saattaa joutua muuttamaan mutta
-	 * 				se melkein kay sellasienaan, POHTIKAA TARKOIN (kyna ja
+	 * 				(HUOM kartan onVapaa-metodi!, sitä saattaa joutua muuttamaan mutta
+	 * 				se melkein kay sellasenaan, POHTIKAA TARKOIN (kyna ja
 	 * 				paperia!)
+	 * 			->	hanki tietoon solmu, johon ollaan astumassa, ja aseta
+	 * 				taman se suunta umpikujaksi, josta ollaan tulossa
+	 * 				(annaViereisenKoordinaatit ja asetaEste)
 	 * 		2)	jos vapaita suuntia enemman kuin yksi, pyri ruutuun, joka
 	 * 			eliminoisi mahdollisimman monta vapaata suuntaa eli:
 	 * 			2.1)Jokaista omaa vapaata suuntaa kohden muodosta koordinaatit

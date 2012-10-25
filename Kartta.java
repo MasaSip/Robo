@@ -135,11 +135,14 @@ public class Kartta {
 	 * 			ymparilleen, onko yksikaan uusi naapuri ollut vapaasuuntainen,
 	 * 			kayta kenties List.contains(),
 	 * 			ja tarvittaessa poistaa nama vapaasuuntaisten listalta
+	 * 		-	asettaa solmulle, jossa ollaan numeron, jonka se pyytaa Hermannilta
+	 * 			metodilla annaAskelNumero()
 	 * 
 	 * static annaViereisenKoordinaatit(int x, int y, Ilmansuunta i)
 	 *  -	ottaa parametriksi ruudun koordinaatit, palauttaa talle pyydetyssa
 	 *  	ilmansuunnassa olevan solmun koordinaatit
 	 *  HUOM kaytannossa ota koodi Solmun metodista annaNaapuriSolmu, korvaa
 	 *  sen jalkee annaNaapuriSolmun toiminnallisuus kayttamaan tata.
+	 *
 	 */
 }
