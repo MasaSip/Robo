@@ -74,7 +74,7 @@ public class Kartta {
 	public boolean onVapaa() { // lisaa uusi vapaa
 		// jos ei tunneta tai ei tunneta tai ei tunneta
 		Ilmansuunta i = Ilmansuunta.POHJOINEN;
-		Solmu sijainti = this.annaSolmu(robotti.annaX, robotti.annaY);
+		Solmu sijainti = this.annaSolmu(robotti.annaX(), robotti.annaY());
 		
 		do {
 			if (	// ollaanko halutussa suunnassa jo kayty
@@ -95,7 +95,7 @@ public class Kartta {
 	
 	// lisaa tamanhetkinen sijainti vapaiden solmujen listaan
 	public void lisaaVapaa() {
-		Solmu sijainti = this.annaSolmu(robotti.annaX, robotti.annaY);
+		Solmu sijainti = this.annaSolmu(robotti.annaX(), robotti.annaY());
 		this.vapaasuuntaiset.add(sijainti);
 	} // end of lisaaVapaa
 	
@@ -132,7 +132,8 @@ public class Kartta {
 	 * 	-	robotti kutsuu, kun ollaan astuttu uuteen ruutuun, tekee seuraavat:
 	 * 		-	tutkii, ollaanko astuttu ruutuun siten, että jokin askettain
 	 * 			vapaasuuntainens Solmu ei tata enaa olekaan, ts. katsoo
-	 * 			ymparilleen, onko yksikaan uusi naapuri ollut vapaasuuntainen,
+	 * 			ymparilleen, onko yksikaan uusi naapuri ollut vapaasuuntaisten
+	 * 			solmujen listalla,
 	 * 			kayta kenties List.contains(),
 	 * 			ja tarvittaessa poistaa nama vapaasuuntaisten listalta
 	 * 		-	asettaa solmulle, jossa ollaan numeron, jonka se pyytaa Hermannilta
@@ -145,4 +146,28 @@ public class Kartta {
 	 *  sen jalkee annaNaapuriSolmun toiminnallisuus kayttamaan tata.
 	 *
 	 */
+	public void paivitaKartta(){
+		// tallennetaan tamanhetkinen solmu
+		Solmu nyt = annaSolmu(robotti.annaX(), robotti.annaY());
+		/* tarkistetaan yksitellen, onko naapurisolmu vapaasuuntaisten listalla
+		 * --- pitaisiko tarkistaa ed. vain niilta solmuilta, joihin paastaan 
+		 * --- tamanhetkisesta solmusta? onko valia?
+		 * jos naapurisolmu on listalla, tarkistetaan, pitaisiko se poistaa sielta
+		 */
+		if (this.vapaasuuntaiset.contains(nyt.annaNaapuriSolmu(Ilmansuunta.POHJOINEN))) {
+			// tarkistetaan, onko pohjoisella naapurisolmulla edelleen vapaita suuntia,
+			// kun nyt ollaan kayty tamanhetkisessa ruudussa (onVapaa-metodi?)
+			// jos on, ei poisteta vapaasuuntaisten listalta, muuten poistetaan
+			if () {
+				
+			}
+		} else if (this.vapaasuuntaiset.contains(nyt.annaNaapuriSolmu(Ilmansuunta.ITA))) {
+			//
+		} else if (this.vapaasuuntaiset.contains(nyt.annaNaapuriSolmu(Ilmansuunta.ETELA))) {
+			//
+		} else if (this.vapaasuuntaiset.contains(nyt.annaNaapuriSolmu(Ilmansuunta.LANSI))) {
+			//
+		}
+	}
+	
 }
