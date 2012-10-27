@@ -150,7 +150,44 @@ public class Kartta {
 	 * 			metodilla annaAskelNumero()
 	 * 
 	 * static annaViereisenKoordinaatit(int x, int y, Ilmansuunta i)
-	 *  -	ottaa parametriksi ruudun koordinaatit, palauttaa talle pyydetyssa
+// onko maailmassa
+		if (kartta!=null) {
+
+			// apukoordinaatit, rajoissa [-1,1]
+
+			int x = 0;
+			int y = 0;
+
+			// aseta apukoordinaatit osoittamaan naapuriruudun suuntaan
+			if (suunta!=null)
+				switch (suunta) {
+				case POHJOINEN:
+					y = 1;
+					break;
+				case LANSI:
+					x = -1;
+					break;
+				case ETELA:
+					y = -1;
+					break;
+				case ITA:
+					x = 1;
+					break;
+				default:
+					// ilmansuunta ei ole sopiva
+					return null;
+				} // end of switch
+			/*
+			 * Palauta Solmu halutusta kohdasta
+			 * joka on kohdassa {oma sijainti + apukoordinaatit} 
+			 */
+			return kartta.annaSolmu(this.y+y, this.x+x);
+
+		} // kartta on olemassa
+		return null;
+	} // end of annaNaapuriSolmu
+	 *  
+-	ottaa parametriksi ruudun koordinaatit, palauttaa talle pyydetyssa
 	 *  	ilmansuunnassa olevan solmun koordinaatit
 	 *  HUOM kaytannossa ota koodi Solmun metodista annaNaapuriSolmu, korvaa
 	 *  sen jalkee annaNaapuriSolmun toiminnallisuus kayttamaan tata.
