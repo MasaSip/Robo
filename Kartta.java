@@ -149,7 +149,7 @@ public class Kartta {
 	 * 		-	asettaa solmulle, jossa ollaan numeron, jonka se pyytaa Hermannilta
 	 * 			metodilla annaAskelNumero()
 	 * 
-	 * static annaViereisenKoordinaatit(int x, int y, Ilmansuunta i)
+	 static annaViereisenKoordinaatit(int x, int y, Ilmansuunta i)
 // onko maailmassa
 		if (kartta!=null) {
 
