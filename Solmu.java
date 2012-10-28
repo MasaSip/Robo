@@ -28,11 +28,7 @@ public class Solmu {
 		this.asetaEste(Ilmansuunta.ETELA, Este.VAPAA);
 		this.asetaEste(Ilmansuunta.LANSI, Este.VAPAA);
 	} // end of CTOR
-
-
-	/*
-	 * Anna Solmun Este-status pyydetylle Solmulle
-	 */
+	
 	public int annaX(){
 		return x;
 	}
@@ -41,6 +37,9 @@ public class Solmu {
 		return y;
 	}
 	
+	/*
+	 * Anna Solmun Este-status pyydetylle Solmulle
+	 */
 	public Este annaEste(Ilmansuunta i) {
 		return this.esteetSuunnissa.get(i);
 	} // end of annaEsteet
@@ -58,8 +57,10 @@ public class Solmu {
 	 * Antaa naapurisolmun pyydetysta suunnasta, tama on null jos ei ole
 	 */
 	public Solmu annaNaapuriSolmu(Ilmansuunta suunta) {
-	return Kartta.annaViereisenKoordinaatit(int x, int y, Ilmansuunta i);
-
+		return kartta.annaViereinenSolmu(this.x, this.y, suunta);
+	} // muutettu kayttamaan annaViereinenSolmu-metodia -Viivi
+	
+	
 	public int annaAskelNumero(){
 		return this.numero;
 	}
