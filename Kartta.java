@@ -234,7 +234,7 @@ public class Kartta {
 	/*
 	 * Palauttaa viereisen solmun x-koordinaatin
 	 */
-	public int annaViereisenKoordinaattiX(int x, int y, Ilmansuunta i) {
+	public int annaViereisenX(int x, int y, Ilmansuunta i) {
 		// onko kartta olemassa
 		if (kartta != null) {
 
@@ -267,7 +267,7 @@ public class Kartta {
 	/*
 	 * Palauttaa viereisen solmun y-koordinaatin
 	 */
-	public int annaViereisenKoordinaattiY(int x, int y, Ilmansuunta i) {
+	public int annaViereisenY(int x, int y, Ilmansuunta i) {
 		// onko kartta olemassa
 		if (kartta != null) {
 
