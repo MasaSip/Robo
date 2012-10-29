@@ -2,9 +2,7 @@ import java.util.HashMap;
 
 public class Solmu {
 	private HashMap <Ilmansuunta, Este> esteetSuunnissa;
-	private Ruutu ruutu;
 	private int x, y;
-	private int numero;
 	private Kartta kartta;
 
 	public void asetaKartalle(Kartta kartta, int x, int y) {
@@ -14,12 +12,11 @@ public class Solmu {
 	} // asetaKartalle
 
 	// CTOR
-	public Solmu(int x, int y, Kartta kartta, int numero) {
+	public Solmu(int x, int y, Kartta kartta) {
 
 		this.x = x;
 		this.y = y;
 		this.kartta = kartta;
-		this.numero = numero;
 		
 		this.esteetSuunnissa = new HashMap<Ilmansuunta, Este>();
 
@@ -28,7 +25,11 @@ public class Solmu {
 		this.asetaEste(Ilmansuunta.ETELA, Este.VAPAA);
 		this.asetaEste(Ilmansuunta.LANSI, Este.VAPAA);
 	} // end of CTOR
-	
+
+
+	/*
+	 * Anna Solmun Este-status pyydetylle Solmulle
+	 */
 	public int annaX(){
 		return x;
 	}
@@ -37,9 +38,6 @@ public class Solmu {
 		return y;
 	}
 	
-	/*
-	 * Anna Solmun Este-status pyydetylle Solmulle
-	 */
 	public Este annaEste(Ilmansuunta i) {
 		return this.esteetSuunnissa.get(i);
 	} // end of annaEsteet
@@ -57,15 +55,48 @@ public class Solmu {
 	 * Antaa naapurisolmun pyydetysta suunnasta, tama on null jos ei ole
 	 */
 	public Solmu annaNaapuriSolmu(Ilmansuunta suunta) {
-		return kartta.annaViereinenSolmu(this.x, this.y, suunta);
-	} // muutettu kayttamaan annaViereinenSolmu-metodia -Viivi
+
+		// onko maailmassa
+		if (kartta!=null) {
+
+			// apukoordinaatit, rajoissa [-1,1]
+
+			int x = 0;
+			int y = 0;
+
+			// aseta apukoordinaatit osoittamaan naapuriruudun suuntaan
+			if (suunta!=null)
+				switch (suunta) {
+				case POHJOINEN:
+					y = 1;
+					break;
+				case LANSI:
+					x = -1;
+					break;
+				case ETELA:
+					y = -1;
+					break;
+				case ITA:
+					x = 1;
+					break;
+				default:
+					// ilmansuunta ei ole sopiva
+					return null;
+				} // end of switch
+			/*
+			 * Palauta Solmu halutusta kohdasta
+			 * joka on kohdassa {oma sijainti + apukoordinaatit} 
+			 */
+			//System.out.println("NAAPURISOLMU KOORDINAATEISSA X: " + this);
+			return kartta.annaSolmu(this.x+x, this.y+y);
+
+		} // kartta on olemassa
+		return null;
+	} // end of annaNaapuriSolmu
 	
-	
-	public int annaAskelNumero(){
-		return this.numero;
+	public String toString() {
+		String ulos = "(" + this.x + ", " + this.y + ")";
+		return ulos;
 	}
 	
-	public void asetaAskelNumero(int numero){
-		this.numero = numero;
-	}
 }

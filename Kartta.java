@@ -22,12 +22,9 @@ public class Kartta {
 	 * tekeva mutta varmasti toimiva robotti.
 	 */
 	private List<Solmu> vapaasuuntaiset;
-	// viittaus robottiin
-	private HermanniRobotti robotti;
 
 	// CTOR
-	public Kartta(HermanniRobotti robotti) {
-		this.robotti = robotti;
+	public Kartta() {
 		kartta = new HashMap<Point, Solmu>();
 		this.vapaasuuntaiset = new ArrayList<Solmu>();
 	} // end of CTOR
@@ -73,10 +70,7 @@ public class Kartta {
 	 * Jos kusutaan ilman parametreja, oletetaan, etta halutaan robotin
 	 * tamanhetkisen sijainnin vapaustieto.
 	 */
-	public boolean onVapaa() { // onko solmu vapaasuuntainen
-		return onVapaa(robotti.annaX(), robotti.annaY());
-	}
-
+	/**
 	// palauttaa true, jos ymparilla on vapaita suuntia
 	public boolean onVapaa(int x, int y) {
 		// jos ei tunneta tai ei tunneta tai ei tunneta
@@ -98,31 +92,74 @@ public class Kartta {
 												// koska kaantaa ennen checkia
 		return false;
 	} // end of onVapaa
+	*/
+	
 
+	public int onVapaa(int x, int y) {
+		Solmu sijainti = this.annaSolmu(x, y);
+		return onVapaa(sijainti);
+	}
+	
+	// palauttaa true, jos ymparilla on vapaita suuntia
+	public int onVapaa(Solmu sijainti) {
+		// jos ei tunneta tai ei tunneta tai ei tunneta
+		Ilmansuunta i = Ilmansuunta.POHJOINEN;
+		int lkm = 0;
+		//Solmu sijainti = this.annaSolmu(x, y);
+		
+	//	System.out.println("TARKISTETAAN ONVAPAA");
+		do
+		{
+			// ollaanko halutussa suunnassa viela kayty
+			if (
+				(sijainti.annaNaapuriSolmu(i) == null) &&
+				// onko halutussa suunnassa seina
+				(sijainti.annaEste(i) == Este.VAPAA))
+			{
+//				Solmu n = sijainti.annaNaapuriSolmu(i);
+				lkm++;
+			}
+			// suunta ei ollut vapaa, kaannetaan suuntaa
+			i = i.vasen();
+		} while (i!=Ilmansuunta.POHJOINEN); // kierratetaan lanteen asti,
+											// koska kaantaa ennen checkia
+//		System.out.println("EI OLLUT VAPAA");
+		return lkm;
+	} // end of onVapa
+	
 	// lisaa tamanhetkinen sijainti vapaiden solmujen listaan
-	public void lisaaVapaa() {
-		Solmu sijainti = this.annaSolmu(robotti.annaX(), robotti.annaY());
+	public void lisaaVapaa(int x, int y) {
+		Solmu sijainti = this.annaSolmu(x, y);
 		this.vapaasuuntaiset.add(sijainti);
+		System.out.println("\t\t ADD: " + sijainti);
 	} // end of lisaaVapaa
 
 	// poista pyydetty solmu listasta
 	public void poistaVapaa(Solmu poistettava) {
 		if (poistettava != null)
-			if (vapaasuuntaiset.contains(poistettava))
+			if (vapaasuuntaiset.contains(poistettava)) {
 				vapaasuuntaiset.remove(poistettava);
+				
+				System.out.println("\t\t REM: " + poistettava);
+			}
 	} // end of poistaVapaa
 
 	// palauta viimeisin vapaa solmu, eli pinon paallimainen
 	public Solmu annaViimeisinVapaa() {
 		int koko = vapaasuuntaiset.size();
+		//System.out.println("annaViimeisinVapaa():");
+		//System.out.println("koko: " + koko);
 		if (koko > 0) { // jos listassa on mitaan
-
 			Solmu s = vapaasuuntaiset.get(koko - 1); // muista viimeisin
-			vapaasuuntaiset.remove(koko - 1); // poista viimeisin
+			//vapaasuuntaiset.remove(koko - 1); // poista viimeisin
 			return s; // palauta viimeisin
 		}
 		return null; // muutoin palauta null
 	} // end of annaViimeisinVapaa
+	
+	public void printVapaasuuntaiset() {
+		System.out.println(vapaasuuntaiset);
+	}
 
 	/*
 	 * public static void main(String[] args) { }
@@ -140,12 +177,9 @@ public class Kartta {
 	 * Hermannilta metodilla annaAskelNumero()
 	 */
 
-	public void paivitaKartta() {
+	public void paivitaKartta(int x, int y) {
 		// tallennetaan tamanhetkinen solmu
-		Solmu nyt = annaSolmu(robotti.annaX(), robotti.annaY());
-
-		// asetetaan solmulle askelnumero, joka pyydetaan Hermannilta
-		nyt.asetaAskelNumero(robotti.annaAskelNumero());
+		Solmu tama = annaSolmu(x, y);
 
 		/*
 		 * tarkistetaan yksitellen, onko naapurisolmu vapaasuuntaisten listalla
@@ -153,44 +187,31 @@ public class Kartta {
 		 * --- tamanhetkisesta solmusta? onko valia? jos naapurisolmu on
 		 * listalla, tarkistetaan, pitaisiko se poistaa sielta
 		 */
-		if (this.vapaasuuntaiset.contains(nyt
-				.annaNaapuriSolmu(Ilmansuunta.POHJOINEN))) {
-			// tarkistetaan, onko pohjoisella naapurisolmulla edelleen vapaita
-			// suuntia,
-			// kun nyt ollaan kayty tamanhetkisessa ruudussa (onVapaa-metodi)
-			if (this.onVapaa(nyt.annaNaapuriSolmu(Ilmansuunta.POHJOINEN)
-					.annaX(), nyt.annaNaapuriSolmu(Ilmansuunta.POHJOINEN)
-					.annaY()) == false) {
-				// jos ei ole enaa vapaita suuntia, poistetaan listalta
-				this.vapaasuuntaiset.remove(nyt
-						.annaNaapuriSolmu(Ilmansuunta.POHJOINEN));
-			}
-			// ja sama muille ilmansuunnille:
-		} else if (this.vapaasuuntaiset.contains(nyt
-				.annaNaapuriSolmu(Ilmansuunta.ITA))) {
-			if (this.onVapaa(nyt.annaNaapuriSolmu(Ilmansuunta.ITA).annaX(), nyt
-					.annaNaapuriSolmu(Ilmansuunta.ITA).annaY()) == false) {
-				// jos ei ole enaa vapaita suuntia, poistetaan listalta
-				this.vapaasuuntaiset.remove(nyt
-						.annaNaapuriSolmu(Ilmansuunta.ITA));
-			}
-		} else if (this.vapaasuuntaiset.contains(nyt
-				.annaNaapuriSolmu(Ilmansuunta.ETELA))) {
-			if (this.onVapaa(nyt.annaNaapuriSolmu(Ilmansuunta.ETELA).annaX(),
-					nyt.annaNaapuriSolmu(Ilmansuunta.ETELA).annaY()) == false) {
-				// jos ei ole enaa vapaita suuntia, poistetaan listalta
-				this.vapaasuuntaiset.remove(nyt
-						.annaNaapuriSolmu(Ilmansuunta.ETELA));
-			}
-		} else if (this.vapaasuuntaiset.contains(nyt
-				.annaNaapuriSolmu(Ilmansuunta.LANSI))) {
-			if (this.onVapaa(nyt.annaNaapuriSolmu(Ilmansuunta.LANSI).annaX(),
-					nyt.annaNaapuriSolmu(Ilmansuunta.LANSI).annaY()) == false) {
-				// jos ei ole enaa vapaita suuntia, poistetaan listalta
-				this.vapaasuuntaiset.remove(nyt
-						.annaNaapuriSolmu(Ilmansuunta.LANSI));
-			}
-		}
+		
+		
+		/**
+		 * Tassa oli tosi hyva logiikka! Kirjotin sen vahan helpompaan
+		 * muotoon eli otin "yhteisiksi tekijoiksi" usein kaytetyt ilmaukset.
+		 * - Olli
+		 */
+		Solmu naapuri;
+		Ilmansuunta i = Ilmansuunta.POHJOINEN;
+		for (int c=0; c<4; c++) {
+			// hankitaan naapuri
+			naapuri = tama.annaNaapuriSolmu(i);
+			// jos on naapuri
+			if (naapuri!=null) {
+				if (this.vapaasuuntaiset.contains(naapuri)) {
+					// tarkistetaan, onko naapurisolmulla edelleen vapaita
+					// suuntia,
+					if (this.onVapaa(naapuri)==0) {
+						// jos ei ole enaa vapaita suuntia, poistetaan listalta
+						poistaVapaa(naapuri);
+					} // naapuri ei ole enaa vapaa
+				} // naapuri oli vapaasuuntainen
+			} // naapuri oli olemassa
+			i = i.vasen();
+		} // for kaydaan kaikki suunnat lapi
 	} // end of paivitaKartta
 	
 	/*
