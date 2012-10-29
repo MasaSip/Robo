@@ -1,5 +1,12 @@
-import java.util.HashMap;
-import java.awt.Point;
+/***********************************************************************
+ * 
+ * H E R M A N N I robotti
+ * #######################
+ * OLO3-ryhman tuotos
+ * Huomioikaa toki, etta toimitimme mukavan robottigrafiikan paketissa.
+ * Olettehan ystavallisia ja siirratte sen robottikuvien kansioon.
+ * *********************************************************************
+ */
 
 public class HermanniRobotti extends Robotti {
 
@@ -8,47 +15,48 @@ public class HermanniRobotti extends Robotti {
 	private int y; //kasvaa ylšs pohjoiseen
 
 
+	// CTOR
 	public HermanniRobotti() {
 		y = 0;
 		x = 0;
 		kartta = new Kartta();
-	}
+	} // end of CTOR
 
+	// tarkistaa ympariston ja tallentaa tiedot seinista Karttaan Solmuihin
 	public void tarkistaYmparisto(){
 
+		// jos ruudussa ei ole viela vierailtu
 		if (!kartta.onSolmu(this.x, this.y)) {
 
+			// lisataan solmu
 			kartta.lisaaSolmu(x, y, new Solmu(x, y, kartta));
 			Solmu solmu = kartta.annaSolmu(x, y);
 
+			
+			// kay lapi kaikki suunnat ja tallentaa tiedot Esteista Solmuun
 			Este e;
-
-			for ( int i = 0; i < 4; i++) {
+			for ( int c=0; c<4;c++) { // laskuri neljaan
 				if (voiEdeta())
 					e = Este.VAPAA;
 				else e = Este.SEINA;
 
-				Ilmansuunta s = Ilmansuunta.numerostaSuunta(annaSuunta());
-				solmu.asetaEste(s, e);
+				//
+				Ilmansuunta i = Ilmansuunta.numerostaSuunta(annaSuunta());
+				solmu.asetaEste(i, e);
 				kaannyOikealle();
-			} // for
+			} // for joka kay suunnat lapi
 
-			int k = kartta.onVapaa(this.x, this.y);
-			//System.out.println(k);
-			if (k > 1) {
+			// jos karttalla on kaymattomia, vapaita ruutuja enemman kuin 1
+			// lisaa listaan
+			if (kartta.onVapaa(this.x, this.y) > 1)
 				kartta.lisaaVapaa(this.x, this.y);
-			}
 		} // ei ole kayty viela
 	} // end of tarkistaYmparisto
 
 
-	// rutiini, joka etsii sopivan suunnan
+	// rutiini, joka kaantaa oikeaan suuntaa
 	public void kaannyOikeaanSuuntaan(){
-		/* HUOM while silmukka tarvitaan, koska kaannyOikeaanSuuntaan on
-		 * tarkoitus kaantaa robottia, eika vain muuttaa sen luuloa omasta
-		 * suunnastaan!
-		 */
-
+		
 		// kaantaa Hermannia, kunnes oma suunta vastaa parasta suuntaa
 		int s = Ilmansuunta.suunnastaNumero(etsiSopivinSuunta());
 		while (s != this.annaSuunta()){
@@ -56,18 +64,22 @@ public class HermanniRobotti extends Robotti {
 		}
 	}
 
+	
+	/*
+	 * Etsii sopivimman suunnan.
+	 * 
+	 * => Jos ollaan umpikujassa, kayttaa A* algoritmia ja etsii lyhimman tien
+	 * viimeisimpaan ruutuun, jossa tiedetaan olleen kaymattomia suuntia.
+	 * 
+	 * => Jos ei olla umpikujassa, pyritaan valitsemaan suunta, joka eliminoisi
+	 * mahdollisimman monta tietoa vapaasta suunnasta.
+	 */
 	public Ilmansuunta etsiSopivinSuunta() {
-
-		/* loppusuunnan alkuarvolla ei ole valia, koska jossain suunnassa
-		 * on vakisin pienempi askelnumero, koska Hermanni on tullut jostain
-		 * suunnasta.
-		 */
 
 		// Umpikuja
 		if (kartta.onVapaa(this.x, this.y)==0) {
 
-			//System.out.println("UMPIKUJA!");
-
+			// luo uusi reitinhakija ja hae reitti
 			Reitinhaku reitinhaku = new Reitinhaku();
 			Ilmansuunta s = reitinhaku.annaSuunta(kartta,
 					kartta.annaSolmu(x, y), kartta.annaViimeisinVapaa());
@@ -78,38 +90,22 @@ public class HermanniRobotti extends Robotti {
 
 			return s;
 		} // oltiin umpikujassa
+		
+		
 		// Enta, jos ei olla umpikujassa
 		else {
-			/*
-
-			// tarkista, missa kaymattomia, valitse ensimmainen
-			Ilmansuunta i = Ilmansuunta.POHJOINEN;
-			Solmu s = kartta.annaSolmu(this.x, this.y);
-			Solmu n;
-			for (int c=0; c<4; c++) {
-				n = s.annaNaapuriSolmu(i);
-				if ((n==null) && (s.annaEste(i)==Este.VAPAA))
-					return i;
-				else
-					i = i.vasen();
-			}
-			return null;
-			 */
-
-			System.out.println("USEITA VAPAITA SUUNTIA");
-			int laskurit[] = {0,0,0,0};
-
+			
+			// laskurit mielusimman suunnan laskemiseen
+			int laskurit[] = {0, 0, 0, 0};
 			// Aloitetaan tarkastelu aina pohjoisesta
 			//Ilmansuunta tarkastelusuunta = Ilmansuunta.POHJOINEN;
 
 			Ilmansuunta naapurisuunta = Ilmansuunta.POHJOINEN;
 
-			Solmu s = kartta.annaSolmu(this.x, this.y); // solmu
-			Solmu n; // naapuri
+			Solmu s = kartta.annaSolmu(this.x, this.y); // solmu jossa ollaan
 
 			for (int c=0; c<4; c++) {
 
-				n = s.annaNaapuriSolmu(naapurisuunta);
 				System.out.println("Naapurisuunta " + naapurisuunta);
 
 				int nx = kartta.annaViereisenX(this.x, this.y, naapurisuunta);
@@ -117,25 +113,24 @@ public class HermanniRobotti extends Robotti {
 				
 				// jos tutkittavaan naapurisuuntaan on VAPAA
 				if ((s.annaEste(naapurisuunta) == Este.VAPAA)) {
-					// kasvatetaan valmiiksi yhdella
-					//laskurit[Ilmansuunta.suunnastaNumero(naapurisuunta)]++;
+					
 					// aloitetaan naapurisuunnasta vasemmalle
 					Ilmansuunta tarksuunta = naapurisuunta.vasen();
 
-					// cc on dummy
-					for (int cc=0; cc<3; cc++) {
-						
-						//System.out.println("Tarkkailusuunta: " + tarksuunta);
+					// cc on dummy laskuri
+					for (int cc=0; cc<3; cc++) {		
 
 						/* jos viereisella solmulla on viela viereinen:
 						 * - jos tama on vapaasuuntainen
 						 * - jos naiden valilla on VAPAA
 						 * => kasvata laskuria
 						 */
-						// v on naapurin viereinen
+						
+						// v on naapurin viereinen, talle koordinaatit
 						int vx = kartta.annaViereisenX(nx, ny, tarksuunta);
 						int vy = kartta.annaViereisenY(nx, ny, tarksuunta);
 						
+						// Solmu v
 						Solmu v = kartta.annaSolmu(vx, vy);
 						if (v != null) {
 							// jos v on vapaa ja jos v:n ja n:n valilla
@@ -155,13 +150,7 @@ public class HermanniRobotti extends Robotti {
 				} // viereinen solmu olemassa ja VAPAA
 				naapurisuunta = naapurisuunta.oikea();
 			} // for kay lapi viereiset solmut
-
-			System.out.println("LASKURIT:");
-			System.out.println("P: "+ laskurit[0]);
-			System.out.println("I: "+ laskurit[1]);
-			System.out.println("E: "+ laskurit[2]);
-			System.out.println("L: "+ laskurit[3]);
-
+			
 			// katsotaan mika laskureista on suurin
 			int suurinLaskureidenArvo = 0;
 			int suurimmanArvonIndeksi = 0;
@@ -184,21 +173,13 @@ public class HermanniRobotti extends Robotti {
 				}
 			}
 
-	// Asetetaan suurinta laskuria vastaava suunta
-
-	/* palauttaa suunnan, johon hermannin tulisi lahtea
-	 * riippumatta mihin suuntaan hermanni aluksi katsoi
-	 */
-
-	return Ilmansuunta.numerostaSuunta(suurimmanArvonIndeksi);
+			// Asetetaan suurinta laskuria vastaava suunta
+			return Ilmansuunta.numerostaSuunta(suurimmanArvonIndeksi);
 		} // ei oltu umpikujassa
 	} // end of etsiSopivinSuunta
 
 	// paivittaa robotin sijainnin kartalla vuoron jalkeen
 	public void asetaKoordinaatit(){
-
-		//System.out.println("x: " + this.x + " y: " + this.y);
-
 		switch(annaSuunta()) {
 
 		case 0: y++;
@@ -214,36 +195,23 @@ public class HermanniRobotti extends Robotti {
 	}
 
 
+	// tekee siirron
 	public void teeSiirto(){
 
-		// ollaankoMaalissa();
-		//System.out.println("Hermanni (" + this.x + ", " + this.y + ")");
-//		kartta.printVapaasuuntaiset();
+		// jos ei olla maalissa
+		if (!onMaalissa()) {
+			tarkistaYmparisto();
+			// paivittaa kartan uusien tietojen pohjalta
+			kartta.paivitaKartta(this.x, this.y);
+			
+			// etsii oikean suunnan ja kaantyy
+			kaannyOikeaanSuuntaan();
+			// jos eteneminen onnistuu, asetaa uudet koordinaatit
+			if (etene()) {
+				asetaKoordinaatit();
+			}
+		} // oltiin maalissa
 
-		tarkistaYmparisto();
-		kartta.paivitaKartta(this.x, this.y);
-
-		/*
-		System.out.println("P " + kartta.annaSolmu(this.x, this.y)
-				.annaEste(Ilmansuunta.POHJOINEN));
-		System.out.println("I " + kartta.annaSolmu(this.x, this.y)
-				.annaEste(Ilmansuunta.ITA));
-		System.out.println("E " + kartta.annaSolmu(this.x, this.y)
-				.annaEste(Ilmansuunta.ETELA));
-		System.out.println("L " + kartta.annaSolmu(this.x, this.y)
-				.annaEste(Ilmansuunta.LANSI));
-		 */
-
-		kaannyOikeaanSuuntaan();
-		if (etene()) {
-			asetaKoordinaatit();
-		}
-
-		// ollaankoMaalissa();
-	}
-
-	/*
-public static void main(String[] args) {
-} */
+	} // end of teeSiirto
 
 }

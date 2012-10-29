@@ -1,5 +1,6 @@
 import java.util.HashMap;
 
+// luokka Solmu, pitaa sisallaan tiedot vierailluista ruuduista
 public class Solmu {
 	private HashMap <Ilmansuunta, Este> esteetSuunnissa;
 	private int x, y;
@@ -26,41 +27,33 @@ public class Solmu {
 		this.asetaEste(Ilmansuunta.LANSI, Este.VAPAA);
 	} // end of CTOR
 
-
-	/*
-	 * Anna Solmun Este-status pyydetylle Solmulle
-	 */
 	public int annaX(){
-		return x;
-	}
+		return this.x;
+	} // end of annaX
 	
 	public int annaY(){
-		return y;
+		return this.y;
 	}
+	// end of annaY
 	
+	// Anna Solmun Este-status pyydetylle Solmulle	
 	public Este annaEste(Ilmansuunta i) {
 		return this.esteetSuunnissa.get(i);
 	} // end of annaEsteet
 
-
-	/*
-	 * Aseta Solmun pyydetylle suunnalle Este-status
-	 */
+	// Aseta Solmun pyydetylle suunnalle Este-status
 	public void asetaEste(Ilmansuunta i, Este este) {
 		this.esteetSuunnissa.put(i, este);
 	} // end of asetaEste
 
 
-	/*
-	 * Antaa naapurisolmun pyydetysta suunnasta, tama on null jos ei ole
-	 */
+	// Antaa naapurisolmun pyydetysta suunnasta, tama on null jos ei ole
 	public Solmu annaNaapuriSolmu(Ilmansuunta suunta) {
 
-		// onko maailmassa
+		// check null
 		if (kartta!=null) {
 
 			// apukoordinaatit, rajoissa [-1,1]
-
 			int x = 0;
 			int y = 0;
 
@@ -87,13 +80,12 @@ public class Solmu {
 			 * Palauta Solmu halutusta kohdasta
 			 * joka on kohdassa {oma sijainti + apukoordinaatit} 
 			 */
-			//System.out.println("NAAPURISOLMU KOORDINAATEISSA X: " + this);
 			return kartta.annaSolmu(this.x+x, this.y+y);
-
 		} // kartta on olemassa
 		return null;
 	} // end of annaNaapuriSolmu
 	
+	// tulosteena koordinaatit
 	public String toString() {
 		String ulos = "(" + this.x + ", " + this.y + ")";
 		return ulos;

@@ -59,12 +59,4 @@ public enum Ilmansuunta {
 		default: return null;
 		}
 	}
-/*
-	public static void main(String args[]){
-		Ilmansuunta suunta;
-		suunta = POHJOINEN;
-		System.out.println(suunta.vasen().vastakkainen());
-	}
-*/
-
 }
